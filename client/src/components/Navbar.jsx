@@ -1,6 +1,6 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Search } from "./Search";
-import { FaSearch } from "react-icons/fa";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const activeNavClass = "border border-black px-3 py-1 transition-all";
@@ -10,17 +10,7 @@ export const Navbar = () => {
   return (
     <nav className="flex items-center px-20 py-10 shadow-lg">
       <div className="flex flex-1 justify-center">
-        <Link to={"/"} className=" mr-auto flex items-center gap-6">
-          <h1 className="text-xl font-thin border border-black flex gap-1 items-center">
-            <div>
-              <span className="text-2xl font-semibold text-gray-600 p-1">
-                M
-              </span>
-              &apos;s
-            </div>
-            <span className="text-white bg-black p-1">Blog</span>
-          </h1>
-        </Link>
+        <Logo />
       </div>
       <div className="flex gap-6 uppercase tracking-widest">
         <NavLink
