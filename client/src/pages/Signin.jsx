@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
 
 export const Signin = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleFormDataChange(e) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -16,8 +22,7 @@ export const Signin = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
-    setErrorMessage(null);
+    dispatch(signInStart());
     try {
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -28,16 +33,15 @@ export const Signin = () => {
 
       if (data.error) {
         console.log(data.error);
-        return setErrorMessage(data.error);
+        dispatch(signInFailure(data.error));
       }
       if (res.ok) {
+        dispatch(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      dispatch(signInFailure(error.message));
       console.log(error.message);
-    } finally {
-      setLoading(false);
     }
   }
 
