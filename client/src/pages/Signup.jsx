@@ -42,7 +42,7 @@ export const Signup = () => {
   }
 
   return (
-    <div className="flex flex-col max-w-md mx-auto justify-center border shadow-lg py-6 mt-20 rounded-lg">
+    <div className="flex flex-col max-w-md mx-auto justify-center border shadow-lg py-16 my-20 rounded-lg">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-20">
         <div className="flex flex-col">
           <label htmlFor="username">Your username</label>
@@ -88,7 +88,7 @@ export const Signup = () => {
         <div className="flex flex-col gap-3">
           <button
             type="submit"
-            className="border border-black text-black text-lg w-full mt-6 py-2 rounded-lg hover:bg-gray-100"
+            className="border border-black text-black w-full mt-6 py-2 rounded-lg hover:bg-gray-100"
             disabled={loading}
           >
             {loading ? "Loading..." : "Signup"}

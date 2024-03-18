@@ -7,6 +7,7 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice";
+import { OAuth } from "../components/OAuth";
 
 export const Signin = () => {
   const [formData, setFormData] = useState({});
@@ -46,7 +47,7 @@ export const Signin = () => {
   }
 
   return (
-    <div className="flex flex-col max-w-md mx-auto justify-center border shadow-lg py-6 mt-20 rounded-lg">
+    <div className="flex flex-col max-w-md mx-auto justify-center border shadow-lg py-16 my-20 rounded-lg">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-20">
         <div className="flex flex-col">
           <label htmlFor="email">Your email</label>
@@ -82,11 +83,12 @@ export const Signin = () => {
         <div className="flex flex-col gap-3">
           <button
             type="submit"
-            className="border border-black text-black text-lg w-full mt-6 py-2 rounded-lg hover:bg-gray-100"
+            className="border border-black text-black w-full mt-6 py-2 rounded-lg hover:bg-gray-100"
             disabled={loading}
           >
             {loading ? "Loading..." : "Sign In"}
           </button>
+          <OAuth />
           <p>
             Dont you have an account?{" "}
             <Link to={"/signup"} className="text-blue-500 hover:underline">
