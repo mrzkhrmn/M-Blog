@@ -88,14 +88,16 @@ export const Signup = () => {
         <div className="flex flex-col gap-3">
           <button
             type="submit"
-            className="bg-blue-400 text-white text-lg w-full mt-6 py-2 rounded-lg hover:bg-blue-500"
+            className="border border-black text-black text-lg w-full mt-6 py-2 rounded-lg hover:bg-gray-100"
             disabled={loading}
           >
             {loading ? "Loading..." : "Signup"}
           </button>
           <p>
             You already have an account?{" "}
-            <Link className="text-blue-500 hover:underline">Sign in</Link>
+            <Link to={"/login"} className="text-blue-500 hover:underline">
+              Sign in
+            </Link>
           </p>
           {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </div>
