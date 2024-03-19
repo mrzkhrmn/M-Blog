@@ -13,6 +13,7 @@ export const DashSidebar = ({ tab }) => {
               icon={HiUser}
               label={"User"}
               labelColor={"dark"}
+              as="div"
             >
               Profile
             </Sidebar.Item>
