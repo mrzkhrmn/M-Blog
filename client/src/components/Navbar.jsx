@@ -2,7 +2,8 @@ import { Link, NavLink } from "react-router-dom";
 import { Search } from "./Search";
 import { Logo } from "./Logo";
 import { Avatar, Dropdown } from "flowbite-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signoutSuccess } from "../redux/user/userSlice";
 
 export const Navbar = () => {
   const activeNavClass = "border border-black px-3 py-1 transition-all";
@@ -10,6 +11,23 @@ export const Navbar = () => {
     "px-3 py-1  border border-transparent hover:border-b-black transition duration-200";
 
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  async function handleSignOutUser() {
+    try {
+      const res = await fetch(`/api/user/signout`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(signoutSuccess(data));
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <nav className="flex items-center px-20 py-10 shadow-lg">
@@ -58,7 +76,9 @@ export const Navbar = () => {
                   <Dropdown.Item>Profile</Dropdown.Item>
                 </Link>
                 <Dropdown.Divider />
-                <Dropdown.Item>Sign out</Dropdown.Item>
+                <Dropdown.Item>
+                  <button onClick={handleSignOutUser}>Sign Out</button>
+                </Dropdown.Item>
               </Dropdown>
             </div>
           ) : (

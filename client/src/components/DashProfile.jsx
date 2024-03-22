@@ -15,6 +15,7 @@ import {
   deleteFailure,
   deleteStart,
   deleteSuccess,
+  signoutSuccess,
   updateFailure,
   updateStart,
   updateSuccess,
@@ -123,6 +124,23 @@ export const DashProfile = () => {
     }
   }
 
+  async function handleSignOutUser() {
+    dispatch(deleteStart());
+    try {
+      const res = await fetch(`/api/user/signout`, {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(signoutSuccess(data));
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   useEffect(() => {
     if (imageFile) {
       uploadImage();
@@ -213,7 +231,11 @@ export const DashProfile = () => {
             {loading ? "Updating..." : "Update Profile"}
           </button>
           <div className="flex justify-between text-red-600">
-            <button type="button" className="hover:underline">
+            <button
+              type="button"
+              className="hover:underline"
+              onClick={handleSignOutUser}
+            >
               Sign Out
             </button>
             <button
