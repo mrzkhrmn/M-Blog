@@ -1,3 +1,4 @@
+import { HiExclamationCircle } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
@@ -11,10 +12,15 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { app } from "../firebase";
 import {
+  deleteFailure,
+  deleteStart,
+  deleteSuccess,
   updateFailure,
   updateStart,
   updateSuccess,
 } from "../redux/user/userSlice";
+
+import { Modal, Button } from "flowbite-react";
 
 export const DashProfile = () => {
   const { currentUser, loading } = useSelector((state) => state.user);
@@ -25,12 +31,12 @@ export const DashProfile = () => {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [updateUserSuccess, setUpdateUserSuccess] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const [formData, setFormData] = useState({});
 
   const filePickerRef = useRef();
   const dispatch = useDispatch();
-  console.log(formData);
 
   function handleFormDataChange(e) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -97,6 +103,23 @@ export const DashProfile = () => {
     } catch (error) {
       dispatch(updateFailure(error.message));
       console.log(error);
+    }
+  }
+
+  async function handleDeleteUser() {
+    dispatch(deleteStart());
+    try {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(deleteSuccess(data));
+      } else {
+        dispatch(deleteFailure(data.message));
+      }
+    } catch (error) {
+      dispatch(deleteFailure(error.message));
     }
   }
 
@@ -193,13 +216,41 @@ export const DashProfile = () => {
             <button type="button" className="hover:underline">
               Sign Out
             </button>
-            <button type="button" className="hover:underline">
+            <button
+              type="button"
+              className="hover:underline"
+              onClick={() => setShowModal(true)}
+            >
               Delete User
             </button>
           </div>
         </div>
       </form>
       <p className="text-green-500">{updateUserSuccess}</p>
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size={"md"}
+      >
+        <Modal.Header className="bg-white" />
+        <Modal.Body className="bg-white">
+          <div className="text-center">
+            <HiExclamationCircle className="h-14 w-14 text-gray-400 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500">
+              Are you sure to delete this user?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color={"failure"} onClick={handleDeleteUser}>
+                Yes, I&apos;m sure
+              </Button>
+              <Button color={"gray"} onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
